@@ -1,5 +1,14 @@
-const quotes = [
-    {
+var changeImageBtn = document.querySelector(".change-bg-btn");
+var button = document.querySelector(".btn-shuffle");
+var quote = document.querySelector(".quote");
+var quoteAuthor = document.querySelector("h3");
+
+var imgUrl = document.querySelector("#img-url-input");
+var imgUrlBtn = document.querySelector(".img-url-done-btn");
+var todoHead = document.querySelector(".todo-header");
+var todoContainer = document.querySelector(".todo-container");
+var addTodoInput = document.querySelector("#add-todo-field");
+const quotes = [{
         name: "Stephen King",
         quote: "Get busy living or get busy dying."
     },
@@ -100,23 +109,77 @@ const quotes = [
         name: "Proverb",
         quote: "Rome was not built in a day and all the builders were not Roman."
     },
-    
+
     {
         name: "Proverb",
         quote: "When a man is dancing it is the ovation of spectatators that tell him when he is doing well."
     },
-    
-    
+
+
 ];
 
-var button = document.querySelector(".btn");
-var quote = document.querySelector(".quote");
-var quoteAuthor = document.querySelector("h3");
+
+
+todoHead.addEventListener("click", function () {
+    if (todoContainer.className.includes("down")) {
+        document.querySelector(".icon-pane").innerText = "^";
+        todoContainer.style.animationPlayState = "running";
+        todoContainer.className = todoContainer.className.substring(0, todoContainer.className.lastIndexOf("down")) + "up";
+    } else {
+        document.querySelector(".icon-pane").innerText = "v";
+        todoContainer.className = todoContainer.className.substring(0, todoContainer.className.lastIndexOf("up")) + "down";
+        todoContainer.style.animationPlayState = "running";
+    }
+
+});
+
+addTodoInput.onkeypress = function () {
+    var key = event.which || event.keyCode;
+    if (key == 13 && addTodoInput.value != "") {
+        addTodo(document.querySelector(".todo-items"), addTodoInput.value);
+        addTodoInput.value = "";
+    }
+
+}
+
+
+
+imgUrlBtn.addEventListener("click", function () {
+    if (imgUrl.value.length > 0) {
+        document.body.style.backgroundImage = "url(" + imgUrl.value + ")";
+    }
+});
+
+imgUrl.addEventListener("keypress", function () {
+    var key = event.which || event.keyCode;
+    if (key == 13) {
+        if (imgUrl.value.length > 0) {
+            document.body.style.backgroundImage = "url(" + imgUrl.value + ")";
+        }
+    }
+});
+
+document.querySelector(".img-url-cancel").addEventListener("click", function () {
+    document.querySelector(".img-url-container").style.display = "none";
+});
+
+changeImageBtn.addEventListener("click", function () {
+    document.querySelector(".img-url-container").style.display = "block";
+    // document.querySelector(".img-url-container").style.animationPlayState = "running";
+});
 
 button.addEventListener("click", displayQuote);
 
-function displayQuote(){
+function displayQuote() {
     var numbers = Math.floor(Math.random() * quotes.length);
     quote.innerHTML = quotes[numbers].quote;
     quoteAuthor.innerHTML = quotes[numbers].name;
+}
+
+function addTodo(parent, value) {
+    var itemToAdd = document.createElement("li");
+    var text = document.createTextNode(value);
+    itemToAdd.className = "todo-item";
+    itemToAdd.appendChild(text);
+    parent.appendChild(itemToAdd);
 }
